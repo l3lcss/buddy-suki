@@ -31,6 +31,7 @@ export default {
         budder: this.ownDetails.id
       })
       await db.ref(`people_without_budder/${this.buddyDetails.id}`).remove()
+      this.hasBuddy = true
     },
     async getBuddyRandom () {
       let res = await db.ref('people_without_budder').once('value')
