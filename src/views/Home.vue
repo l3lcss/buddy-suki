@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="container">
+    <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
+    <div :class="checkContainer">
       <div>
         {{ buddyDetails.thai_nickname }}
       </div>
@@ -17,7 +18,7 @@
         {{ buddyDetails.mobile_phone }}
       </div>
     </div>
-    <button @click="findBuddy()" v-if="!hasBuddy"> find buddy </button>
+    <div @click="findBuddy()" v-if="!hasBuddy" class="btn"> Find Buddy </div>
     <!-- <button @click="getPeopleWithoutBudder()"> getPeopleWithoutBudder </button> -->
     <!-- <button @click="runScript()"> runScript </button> -->
   </div>
@@ -29,6 +30,7 @@ export default {
   name: 'Home',
   data () {
     return {
+      isLoading: false,
       hasBuddy: false,
       ownDetails: {},
       buddyDetails: {},
@@ -45,6 +47,7 @@ export default {
       })
     },
     async findBuddy () {
+      this.isLoading = true
       do {
         await this.getBuddyRandom()
       } while (this.buddyDetails.id === this.ownDetails.id)
@@ -56,6 +59,7 @@ export default {
       })
       await db.ref(`people_without_budder/${this.buddyDetails.id}`).remove()
       this.hasBuddy = true
+      this.isLoading = false
     },
     async getBuddyRandom () {
       let res = await db.ref('people_without_budder').once('value')
@@ -84,7 +88,13 @@ export default {
       return num
     }
   },
+  computed: {
+    checkContainer () {
+      return this.hasBuddy ? 'container' : ''
+    }
+  },
   async mounted () {
+    this.isLoading = true
     if (!this.profile) {
       this.$router.push({ name: 'login' })
     }
@@ -96,22 +106,25 @@ export default {
       let res = await db.ref(`employees/${this.ownDetails.buddy}`).once('value')
       this.buddyDetails = res.val()
     }
+    this.isLoading = false
   }
 }
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Kanit');
-@import url('../css/styleText.css');
 body {
     overflow:hidden;
 }
 .container {
+  color: black;
+  padding: 10vw 4vw;
+  text-align: center;
   font-family: 'Kanit', sans-serif;
   background-color: rgba(255, 235, 205, 0.137);
-  font-size: 1.7rem;
+  width: 70vw;
+  font-size: 4vw !important;
   border-radius: 50%;
-  padding: 5rem;
   box-shadow: 4px 4px 22px 0px rgba(0,0,0,0.75);
 
   -webkit-transition: padding 0.2s;
@@ -120,6 +133,20 @@ body {
   transition: all 0.2s;
   background-color: rgba(255, 235, 205, 0.137);
   border: 2px solid rgb(0, 0, 0);
-  padding: 7rem;
+  padding: 14vw 8vw;
+}
+.btn {
+  background-color: rgba(252, 250, 250, 0.616);
+  border-radius: 50%;
+  text-align: center;
+  font-size: 8vw;
+  font-family: 'Noto Sans TC', sans-serif;
+  padding: 10vh 8vh;
+
+  -webkit-transition: font-size 0.2s;
+}
+.btn:hover {
+  transition: all 0.2s;
+  cursor: pointer;
 }
 </style>
