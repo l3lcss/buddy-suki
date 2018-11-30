@@ -13,4 +13,10 @@ export default {
 
 <style>
 @import url('./css/style.css');
+body {
+    overflow:hidden;
+}
+#app {
+  position: absolute;
+}
 </style>
