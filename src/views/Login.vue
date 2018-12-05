@@ -19,8 +19,12 @@ export default {
   props: ['isLogout'],
   methods: {
     async signIn () {
-      let res = await firebaseAuth.signInWithPopup(googleAuthProvider)
-      alert(res)
+      try {
+        let res = await firebaseAuth.signInWithPopup(googleAuthProvider)
+        alert(res)
+      } catch (error) {
+        alert(error)
+      }
     },
     verifyUser (profile) {
       if (profile.hd && (profile.hd === 'flyingcomma.com' || profile.hd === 'sellsuki.com' || profile.hd === 'fitm.kmutnb.ac.th')) {
