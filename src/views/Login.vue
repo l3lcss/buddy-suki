@@ -19,7 +19,12 @@ export default {
   props: ['isLogout'],
   methods: {
     async signIn () {
-      await firebaseAuth.signInWithRedirect(googleAuthProvider)
+      try {
+        let res = await firebaseAuth.signInWithPopup(googleAuthProvider)
+        alert(res)
+      } catch (error) {
+        alert(error)
+      }
     },
     verifyUser (profile) {
       if (profile.hd && (profile.hd === 'flyingcomma.com' || profile.hd === 'sellsuki.com')) {
@@ -31,17 +36,17 @@ export default {
   },
   async mounted () {
     this.isLoading = true
-    console.log('mounted Login.vue do.')
-    console.log(this.isLogout, 'this.isLogout')
-    if (!this.isLogout) {
-      try {
-        const result = await firebaseAuth.getRedirectResult()
-        this.profile = result.additionalUserInfo.profile
-        this.verifyUser(this.profile)
-      } catch (error) {
-        console.log(error, 'error')
-      }
-    }
+    alert('mounted Login.vue do.')
+    // console.log(this.isLogout, 'this.isLogout')
+    // if (!this.isLogout) {
+    //   try {
+    //     const result = await firebaseAuth.getRedirectResult()
+    //     this.profile = result.additionalUserInfo.profile
+    //     this.verifyUser(this.profile)
+    //   } catch (error) {
+    //     console.log(error, 'error')
+    //   }
+    // }
     this.isLoading = false
   }
 }
