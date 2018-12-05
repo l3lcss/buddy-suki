@@ -2,20 +2,29 @@
   <div>
     <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
     <div :class="checkContainer">
-      <div>
-        {{ buddyDetails.thai_nickname }}
+      <div class="item">
+        <div> <i class="fas fa-address-book icon"></i></div>
+        <div class="text">{{ buddyDetails.thai_nickname }}</div>
       </div>
-      <div>
-        {{ buddyDetails.division }}
+
+      <div class="item">
+        <div><i class="fas fa-code-branch icon"></i></div>
+        <div class="text">{{ buddyDetails.division }}</div>
       </div>
-      <div>
-        {{ buddyDetails.first_name }}
+
+      <div class="item">
+        <div><i class="fas fa-file-signature icon"></i></div>
+        <div class="text">{{ buddyDetails.first_name }}</div>
       </div>
-      <div>
-        {{ buddyDetails.last_name }}
+
+      <div class="item">
+        <div><i class="fas fa-file-signature icon"></i></div>
+        <div class="text">{{ buddyDetails.last_name }}</div>
       </div>
-      <div>
-        {{ buddyDetails.mobile_phone }}
+
+      <div class="item">
+        <div><i class="fas fa-phone-square icon"></i></div>
+        <div class="text">{{ buddyDetails.mobile_phone }}</div>
       </div>
     </div>
     <div @click="findBuddy()" v-if="!hasBuddy" class="btn"> Find Buddy </div>
@@ -123,24 +132,27 @@ export default {
 body {
     overflow:hidden;
 }
-.container {
-  color: black;
-  padding: 10vw 4vw;
-  text-align: center;
-  font-family: 'Kanit', sans-serif;
-  background-color: rgba(255, 235, 205, 0.137);
-  width: 70vw;
-  font-size: 4vw !important;
-  border-radius: 50%;
-  box-shadow: 4px 4px 22px 0px rgba(0,0,0,0.75);
-
-  -webkit-transition: padding 0.2s;
+.item {
+  display: flex;
+  justify-content: left;
+  align-items: center;
 }
-.container:hover {
-  transition: all 0.2s;
-  background-color: rgba(255, 235, 205, 0.137);
-  border: 2px solid rgb(0, 0, 0);
-  padding: 14vw 8vw;
+.icon {
+  width: 10vw;
+  align-items: left;
+}
+.text {
+  padding-left: 1vw;
+}
+.container {
+  padding: 3vh 3vw;
+  color: black;
+  text-align: left;
+  font-family: 'Kanit', sans-serif;
+  background-color: rgba(255, 255, 255, 0.582);
+  width: 80vw;
+  font-size: 2rem !important;
+  box-shadow: 4px 4px 22px 0px rgba(0,0,0,0.75);
 }
 .btn {
   background-color: rgba(252, 250, 250, 0.616);

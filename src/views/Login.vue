@@ -20,10 +20,9 @@ export default {
   methods: {
     async signIn () {
       try {
-        let res = await firebaseAuth.signInWithPopup(googleAuthProvider)
-        alert(res)
+        await firebaseAuth.signInWithRedirect(googleAuthProvider)
       } catch (error) {
-        alert(error)
+        console.log(error, 'error')
       }
     },
     verifyUser (profile) {
@@ -36,17 +35,15 @@ export default {
   },
   async mounted () {
     this.isLoading = true
-    alert('mounted Login.vue do.')
-    // console.log(this.isLogout, 'this.isLogout')
-    // if (!this.isLogout) {
-    //   try {
-    //     const result = await firebaseAuth.getRedirectResult()
-    //     this.profile = result.additionalUserInfo.profile
-    //     this.verifyUser(this.profile)
-    //   } catch (error) {
-    //     console.log(error, 'error')
-    //   }
-    // }
+    if (!this.isLogout) {
+      try {
+        const result = await firebaseAuth.getRedirectResult()
+        this.profile = result.additionalUserInfo.profile
+        this.verifyUser(this.profile)
+      } catch (error) {
+        console.log(error, 'error')
+      }
+    }
     this.isLoading = false
   }
 }
@@ -62,7 +59,7 @@ export default {
 .btn-login {
   background-color: aliceblue;
   font-family: 'Noto Sans TC', sans-serif;
-  font-size: 5vw;
+  font-size: 1.3rem;
   padding: 1vw 2vw;
   opacity: 0.9;
 
@@ -70,26 +67,24 @@ export default {
 }
 .btn-login:hover {
   transition: all 0.2s;
-  font-size: 6vw;
+  font-size: 2rem;
   cursor: pointer;
 }
 .btn-icon {
   background-color: aliceblue;
-  font-size: 5vw;
-  padding: 1vw 2vw;
+  padding: 1.2vw 2vw;
   opacity: 0.9;
 
   -webkit-transition: font-size 0.2s;
 }
 .btn-icon:hover {
   transition: all 0.2s;
-  font-size: 6vw;
   cursor: pointer;
 }
 .icons8-google {
   display: inline-block;
-  width: 5vw;
-  height: 5vw;
+  width: 1.5rem;
+  height: 1.5rem;
   background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4IgogICAgIHdpZHRoPSI0ODAiIGhlaWdodD0iNDgwIgogICAgIHZpZXdCb3g9IjAgMCA0OCA0OCIKICAgICBzdHlsZT0iZmlsbDojMDAwMDAwOyI+PGcgaWQ9InN1cmZhY2UxIj48cGF0aCBzdHlsZT0iIGZpbGw6I0ZGQzEwNzsiIGQ9Ik0gNDMuNjA5Mzc1IDIwLjA4MjAzMSBMIDQyIDIwLjA4MjAzMSBMIDQyIDIwIEwgMjQgMjAgTCAyNCAyOCBMIDM1LjMwNDY4OCAyOCBDIDMzLjY1MjM0NCAzMi42NTYyNSAyOS4yMjI2NTYgMzYgMjQgMzYgQyAxNy4zNzEwOTQgMzYgMTIgMzAuNjI4OTA2IDEyIDI0IEMgMTIgMTcuMzcxMDk0IDE3LjM3MTA5NCAxMiAyNCAxMiBDIDI3LjA1ODU5NCAxMiAyOS44NDM3NSAxMy4xNTIzNDQgMzEuOTYwOTM4IDE1LjAzOTA2MyBMIDM3LjYxNzE4OCA5LjM4MjgxMyBDIDM0LjA0Njg3NSA2LjA1NDY4OCAyOS4yNjk1MzEgNCAyNCA0IEMgMTIuOTUzMTI1IDQgNCAxMi45NTMxMjUgNCAyNCBDIDQgMzUuMDQ2ODc1IDEyLjk1MzEyNSA0NCAyNCA0NCBDIDM1LjA0Njg3NSA0NCA0NCAzNS4wNDY4NzUgNDQgMjQgQyA0NCAyMi42NjAxNTYgNDMuODYzMjgxIDIxLjM1MTU2MyA0My42MDkzNzUgMjAuMDgyMDMxIFogIj48L3BhdGg+PHBhdGggc3R5bGU9IiBmaWxsOiNGRjNEMDA7IiBkPSJNIDYuMzA0Njg4IDE0LjY5MTQwNiBMIDEyLjg3ODkwNiAxOS41MTE3MTkgQyAxNC42NTYyNSAxNS4xMDkzNzUgMTguOTYwOTM4IDEyIDI0IDEyIEMgMjcuMDU4NTk0IDEyIDI5Ljg0Mzc1IDEzLjE1MjM0NCAzMS45NjA5MzggMTUuMDM5MDYzIEwgMzcuNjE3MTg4IDkuMzgyODEzIEMgMzQuMDQ2ODc1IDYuMDU0Njg4IDI5LjI2OTUzMSA0IDI0IDQgQyAxNi4zMTY0MDYgNCA5LjY1NjI1IDguMzM1OTM4IDYuMzA0Njg4IDE0LjY5MTQwNiBaICI+PC9wYXRoPjxwYXRoIHN0eWxlPSIgZmlsbDojNENBRjUwOyIgZD0iTSAyNCA0NCBDIDI5LjE2NDA2MyA0NCAzMy44NTkzNzUgNDIuMDIzNDM4IDM3LjQxMDE1NiAzOC44MDg1OTQgTCAzMS4yMTg3NSAzMy41NzAzMTMgQyAyOS4yMTA5MzggMzUuMDg5ODQ0IDI2LjcxNDg0NCAzNiAyNCAzNiBDIDE4Ljc5Njg3NSAzNiAxNC4zODI4MTMgMzIuNjgzNTk0IDEyLjcxODc1IDI4LjA1NDY4OCBMIDYuMTk1MzEzIDMzLjA3ODEyNSBDIDkuNTAzOTA2IDM5LjU1NDY4OCAxNi4yMjY1NjMgNDQgMjQgNDQgWiAiPjwvcGF0aD48cGF0aCBzdHlsZT0iIGZpbGw6IzE5NzZEMjsiIGQ9Ik0gNDMuNjA5Mzc1IDIwLjA4MjAzMSBMIDQyIDIwLjA4MjAzMSBMIDQyIDIwIEwgMjQgMjAgTCAyNCAyOCBMIDM1LjMwNDY4OCAyOCBDIDM0LjUxMTcxOSAzMC4yMzgyODEgMzMuMDcwMzEzIDMyLjE2NDA2MyAzMS4yMTQ4NDQgMzMuNTcwMzEzIEMgMzEuMjE4NzUgMzMuNTcwMzEzIDMxLjIxODc1IDMzLjU3MDMxMyAzMS4yMTg3NSAzMy41NzAzMTMgTCAzNy40MTAxNTYgMzguODA4NTk0IEMgMzYuOTcyNjU2IDM5LjIwMzEyNSA0NCAzNCA0NCAyNCBDIDQ0IDIyLjY2MDE1NiA0My44NjMyODEgMjEuMzUxNTYzIDQzLjYwOTM3NSAyMC4wODIwMzEgWiAiPjwvcGF0aD48L2c+PC9zdmc+') 50% 50% no-repeat;
   background-size: 100%;
 }
