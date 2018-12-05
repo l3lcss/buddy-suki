@@ -6,8 +6,15 @@
 <script>
 import 'particles.js'
 import './js/app.js'
+import { firebaseAuth } from './config/FirebaseConfig'
 export default {
-  name: 'app'
+  name: 'app',
+  mounted () {
+    const user = firebaseAuth.currentUser
+    if (!user) {
+      this.$router.push({ name: 'login', params: { isLogout: true } })
+    }
+  }
 }
 </script>
 
