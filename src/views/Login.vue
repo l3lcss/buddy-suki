@@ -1,9 +1,8 @@
 <template>
   <div class="login">
-    <!-- <div class="googleLogin"> -->
-    <button class="btnLogin" style="margin-right:1vw;"><i class="icons8-google"></i></button>
-    <button @click="signIn()" class="btnLogin"> Sign In with Google </button>
-    <!-- </div> -->
+    <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
+    <div class="btn-icon" style="margin-right:1vw;"><i class="icons8-google"></i></div>
+    <div @click="signIn()" class="btn-login"> Sign In with Google </div>
   </div>
 </template>
 
@@ -13,14 +12,14 @@ export default {
   name: 'login',
   data () {
     return {
+      isLoading: false,
       profile: ''
     }
   },
+  props: ['isLogout'],
   methods: {
     async signIn () {
-      let res = await firebaseAuth.signInWithPopup(googleAuthProvider)
-      this.profile = res.additionalUserInfo.profile
-      this.verifyUser(this.profile)
+      await firebaseAuth.signInWithRedirect(googleAuthProvider)
     },
     verifyUser (profile) {
       if (profile.hd && (profile.hd === 'flyingcomma.com' || profile.hd === 'sellsuki.com' || profile.hd === 'fitm.kmutnb.ac.th')) {
@@ -29,13 +28,34 @@ export default {
         console.log('is valid email')
       }
     }
+  },
+  async mounted () {
+    this.isLoading = true
+    console.log('mounted Login.vue do.')
+    console.log(this.isLogout, 'this.isLogout')
+    if (!this.isLogout) {
+      try {
+        const result = await firebaseAuth.getRedirectResult()
+        this.profile = result.additionalUserInfo.profile
+        this.verifyUser(this.profile)
+      } catch (error) {
+        console.log(error, 'error')
+      }
+    }
+    this.isLoading = false
   }
 }
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC:700');
-.btnLogin {
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn-login {
+  background-color: aliceblue;
   font-family: 'Noto Sans TC', sans-serif;
   font-size: 5vw;
   padding: 1vw 2vw;
@@ -43,7 +63,20 @@ export default {
 
   -webkit-transition: font-size 0.2s;
 }
-.btnLogin:hover {
+.btn-login:hover {
+  transition: all 0.2s;
+  font-size: 6vw;
+  cursor: pointer;
+}
+.btn-icon {
+  background-color: aliceblue;
+  font-size: 5vw;
+  padding: 1vw 2vw;
+  opacity: 0.9;
+
+  -webkit-transition: font-size 0.2s;
+}
+.btn-icon:hover {
   transition: all 0.2s;
   font-size: 6vw;
   cursor: pointer;

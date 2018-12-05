@@ -19,13 +19,14 @@
       </div>
     </div>
     <div @click="findBuddy()" v-if="!hasBuddy" class="btn"> Find Buddy </div>
+    <div @click="logout()" class="btn-logout">LOGOUT</div>
     <!-- <button @click="getPeopleWithoutBudder()"> getPeopleWithoutBudder </button> -->
     <!-- <button @click="runScript()"> runScript </button> -->
   </div>
 </template>
 
 <script>
-import { db } from '../config/FirebaseConfig.js'
+import { db, firebaseAuth } from '../config/FirebaseConfig.js'
 export default {
   name: 'Home',
   data () {
@@ -86,6 +87,12 @@ export default {
       let res = await db.ref('people_without_budder').once('value')
       let num = res.numChildren()
       return num
+    },
+    async logout () {
+      this.isLoading = true
+      await firebaseAuth.signOut()
+      this.$router.push({ name: 'login', params: { isLogout: true } })
+      this.isLoading = false
     }
   },
   computed: {
@@ -147,6 +154,16 @@ body {
 }
 .btn:hover {
   transition: all 0.2s;
+  cursor: pointer;
+}
+.btn-logout {
+  padding: 0vh 1vw;
+  position: fixed;
+  top: 1vh;
+  right: 1vw;
+  background-color: rgba(1, 45, 83, 0.671);
+  font-size: 4vw;
+  color: aliceblue;
   cursor: pointer;
 }
 </style>
