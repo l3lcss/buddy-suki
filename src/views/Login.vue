@@ -31,17 +31,17 @@ export default {
   },
   async mounted () {
     this.isLoading = true
-    console.log('mounted Login.vue do.')
-    console.log(this.isLogout, 'this.isLogout')
-    if (!this.isLogout) {
-      try {
-        const result = await firebaseAuth.getRedirectResult()
-        this.profile = result.additionalUserInfo.profile
-        this.verifyUser(this.profile)
-      } catch (error) {
-        console.log(error, 'error')
-      }
-    }
+    alert('mounted Login.vue do.')
+    // console.log(this.isLogout, 'this.isLogout')
+    // if (!this.isLogout) {
+    //   try {
+    //     const result = await firebaseAuth.getRedirectResult()
+    //     this.profile = result.additionalUserInfo.profile
+    //     this.verifyUser(this.profile)
+    //   } catch (error) {
+    //     console.log(error, 'error')
+    //   }
+    // }
     this.isLoading = false
   }
 }
