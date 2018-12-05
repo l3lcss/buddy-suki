@@ -6,8 +6,12 @@
 <script>
 import 'particles.js'
 import './js/app.js'
+import { firebaseAuth } from './config/FirebaseConfig.js'
 export default {
-  name: 'app'
+  name: 'app',
+  async mounted () {
+    await firebaseAuth.signOut()
+  }
 }
 </script>
 
