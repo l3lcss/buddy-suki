@@ -27,7 +27,7 @@ export default {
       }
     },
     verifyUser (profile) {
-      if (profile.hd && (profile.hd === 'flyingcomma.com' || profile.hd === 'sellsuki.com' || profile.hd === 'fitm.kmutnb.ac.th')) {
+      if (profile.hd && (profile.hd === 'flyingcomma.com' || profile.hd === 'sellsuki.com')) {
         this.$router.push({ name: 'home', params: { profile: this.profile } })
       } else {
         console.log('is valid email')

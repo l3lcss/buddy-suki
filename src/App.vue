@@ -24,19 +24,15 @@
 <script>
 import 'particles.js'
 import './js/app.js'
-import { firebaseAuth } from './config/FirebaseConfig.js'
+import { firebaseAuth } from './config/FirebaseConfig'
 export default {
   name: 'app',
-  data () {
-    return {
-
+  mounted () {
+    const user = firebaseAuth.currentUser
+    if (!user) {
+      this.$router.push({ name: 'login', params: { isLogout: true } })
     }
-  },
-  methods: {
 
-  },
-  async mounted () {
-    await firebaseAuth.signOut()
   }
 }
 </script>
